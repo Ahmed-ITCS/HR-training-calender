@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('search') }}">view or edit Document</a></li>
+            <li><a href="{{ url_for('all_documents') }}">All Entries</a></li>
+
+        </ul>
+    </nav>
+
+    <main>
+        <h1>View Document Details</h1>
+        {% if document %}
+        <div class="document-details">
+            <p><strong>Name:</strong> {{ document.name }}</p>
+            
+            <p><strong>iqama:</strong> {{ document.iqama }}</p>
+            <p><strong>iqama Expiry Date:</strong> {{ document.iqama_expiry }}</p>
+            
+            <p><strong>License</strong> {{ document.license }}</p>
+            <p><strong>License Expiry Date:</strong> {{ document.license_expiry }}</p>
+
+
+            <p><strong>Muqeem Expiry Date:</strong> {{ document.MuqeemExpiry }}</p>
+            <p><strong>Sabic id Expiry Date:</strong> {{ document.SabicExpiry }}</p>
+            <p><strong>Aramco id Expiry Date:</strong> {{ document.AramcoidExpiry }}</p>
+            <p><strong>Sabic medical Expiry Date:</strong> {{ document.SabicmedicalExpiry }}</p>
+            <p><strong>Ajeer Expiry Date:</strong> {{ document.AjeerExpiry }}</p>
+            <p><strong>other1 Expiry Date:</strong> {{ document.other1expiry }}</p>
+            <p><strong>other2 Expiry Date:</strong> {{ document.other2expiry }}</p>
+            <p><strong>other3 Expiry Date:</strong> {{ document.other3expiry }}</p>
+
+            <p><strong>Muqeem picture:</strong> 
+                {% if document.Muqeempicture %}
+                    <img src="{{ url_for('static', filename=document.Muqeempicture) }}" alt="Muqeem Picture" style="max-width: 200px; height: auto;">
+                    <br>
+                    <button><a href="{{ url_for('static', filename=document.Muqeempicture) }}" download="Muqeem_Picture">Download Muqeem Picture</a></button>
+                {% else %}
+                    Not available
+                {% endif %}
+            </p>
+            
+            <p><strong>Sabic id:</strong> {{ document.Sabicid }}</p>
+            
+            <p><strong>Sabic id picture:</strong> 
+                {% if document.Sabicidpicture %}
+                    <img src="{{ url_for('static', filename=document.Sabicidpicture) }}" alt="Sabic ID Picture" style="max-width: 200px; height: auto;">
+                    <br>
+                    <button><a href="{{ url_for('static', filename=document.Sabicidpicture) }}" download="Sabic_ID_Picture">Download Sabic ID Picture</a></button>
+                {% else %}
+                    Not available
+                {% endif %}
+            </p>
+            
+            <p><strong>Aramco id:</strong> {{ document.Aramcoid }}</p>
+            
+            <p><strong>Aramco id picture:</strong> 
+                {% if document.Aramcoidpicture %}
+                    <img src="{{ url_for('static', filename=document.Aramcoidpicture) }}" alt="Aramco ID Picture" style="max-width: 200px; height: auto;">
+                    <br>
+                    <button> <a href="{{ url_for('static', filename=document.Aramcoidpicture) }}" download="Aramco_ID_Picture">Download Aramco ID Picture</a></button>
+                {% else %}
+                    Not available
+                {% endif %}
+            </p>
+            
+            <p><strong>Sabicmedicalpicture:</strong> 
+                {% if document.Sabicmedicalpicture %}
+                    <img src="{{ url_for('static', filename=document.Sabicmedicalpicture) }}" alt="Sabic Medical Picture" style="max-width: 200px; height: auto;">
+                    <br>
+                    <button><a href="{{ url_for('static', filename=document.Sabicmedicalpicture) }}" download="Sabic_Medical_Picture">Download Sabic Medical Picture</a></button>
+                {% else %}
+                    Not available
+                {% endif %}
+            </p>
+            
+            <p><strong>Ajeerpicture:</strong> 
+                {% if document.Ajeerpicture %}
+                    <img src="{{ url_for('static', filename=document.Ajeerpicture) }}" alt="Ajeer Picture" style="max-width: 200px; height: auto;">
+                    <br>
+                    <button><a href="{{ url_for('static', filename=document.Ajeerpicture) }}" download="Ajeer_Picture">Download Ajeer Picture</a></button>
+                {% else %}
+                    Not available
+                {% endif %}
+            </p>
+            
+            <p><strong>Other 1:</strong> 
+                {% if document.other1 %}
+                    <img src="{{ url_for('static', filename=document.other1) }}" alt="Other 1 Picture" style="max-width: 200px; height: auto;">
+                    <br>
+                    <button><a href="{{ url_for('static', filename=document.other1) }}" download="Other_1_Picture">Download Other 1 Picture</a></button>
+                {% else %}
+                    Not available
+                {% endif %}
+            </p>
+            
+            <p><strong>Other 2:</strong> 
+                {% if document.other2 %}
+                    <img src="{{ url_for('static', filename=document.other2) }}" alt="Other 2 Picture" style="max-width: 200px; height: auto;">
+                    <br>
+                    <button><a href="{{ url_for('static', filename=document.other2) }}" download="Other_2_Picture">Download Other 2 Picture</a></button>
+                {% else %}
+                    Not available
+                {% endif %}
+            </p>
+            
+            <p><strong>Other 3:</strong> 
+                {% if document.other3 %}
+                    <img src="{{ url_for('static', filename=document.other3) }}" alt="Other 3 Picture" style="max-width: 200px; height: auto;">
+                    <br>
+                    <button><a href="{{ url_for('static', filename=document.other3) }}" download="Other_3_Picture">Download Other 3 Picture</a></button>
+                {% else %}
+                    Not available
+                {% endif %}
+            </p>
+            
+
+
+            {% if document.picture_path %}
+            <div>
+                <h3>Uploaded Document:</h3>
+                <img src="{{ url_for('static', filename=document.picture_path) }}" alt="Document Image" style="max-width: 100%; height: auto;">
+            </div>
+            {% endif %}
+
+            <button><a href="{{ url_for('edit_document', id=document.id) }}">Edit Document</a></button>
+        </div>
+        {% else %}
+        <p>No document found. Please check the iqama number.</p>
+        {% endif %}
+    </main>
+</body>
+</html>

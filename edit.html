@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('search') }}">view or edit Document</a></li>
+            <li><a href="{{ url_for('all_documents') }}">All Entries</a></li>
+
+        </ul>
+    </nav>
+
+    <main>
+        <h1>Edit Document</h1>
+
+        {% if document %}
+        <form method="POST" enctype="multipart/form-data">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="{{ document.name }}" required><br><br>
+
+            <label for="Iqama">iqama:</label>
+            <input type="text" id="Iqama" name="Iqama" value="{{ document.iqama }}" required><br><br>
+
+            <label for="iqama_expiry">iqama Expiry Date:</label>
+            <input type="date" id="iqama_expiry" name="iqama_expiry" value="{{ document.iqama_expiry }}" required><br><br>
+
+            <label for="license">License:</label>
+            <input type="text" id="license" name="license" value="{{ document.license }}" required><br><br>
+
+            <label for="license_expiry">License Expiry Date:</label>
+            <input type="date" id="license_expiry" name="license_expiry" value="{{ document.license_expiry }}" required><br><br>
+
+            <label for="iqamapicture">iqama Picture:</label>
+            <input type="file" id="iqamapicture" name="iqamapicture"><br><br>
+
+            <label for="licensepicture">License Picture:</label>
+            <input type="file" id="licensepicture" name="licensepicture"><br><br>
+
+            <label for="Muqeempicture">Muqeem Picture:</label>
+            <input type="file" id="Muqeempicture" name="Muqeempicture"><br><br>
+            <label for="MuqeemExpiry">Muqeem Expiry Date:</label>
+            <input type="date" id="MuqeemExpiry" name="MuqeemExpiry" value="{{ document.MuqeemExpiry }}"required><br><br>
+
+            <label for="Sabicidpicture">Sabic ID Picture:</label>
+            <input type="file" id="Sabicidpicture" name="Sabicidpicture"><br><br>
+            <label for="SabicExpiry">Sabic Expiry Date:</label>
+            <input type="date" id="SabicExpiry" name="SabicExpiry" value="{{ document.SabicExpiry }}"required><br><br>
+
+            <label for="Aramcoidpicture">Aramco ID Picture:</label>
+            <input type="file" id="Aramcoidpicture" name="Aramcoidpicture"><br><br>
+            <label for="AramcoidExpiry">Aramcoid Expiry Date:</label>
+            <input type="date" id="AramcoidExpiry" name="AramcoidExpiry" value="{{ document.AramcoidExpiry }}"required><br><br>
+
+            <label for="Sabicmedicalpicture">Sabic Medical Picture:</label>
+            <input type="file" id="Sabicmedicalpicture" name="Sabicmedicalpicture"><br><br>
+            <label for="SabicmedicalExpiry">Sabicmedical Expiry Date:</label>
+            <input type="date" id="SabicmedicalExpiry" name="SabicmedicalExpiry" value="{{ document.SabicmedicalExpiry }}"required><br><br>
+
+            <label for="Ajeerpicture">Ajeer Picture:</label>
+            <input type="file" id="Ajeerpicture" name="Ajeerpicture"><br><br>
+            <label for="AjeerExpiry">Ajeer Expiry Date:</label>
+            <input type="date" id="AjeerExpiry" name="AjeerExpiry" value="{{ document.AjeerExpiry }}"required><br><br>
+
+            <label for="other1picture">Other 1 Picture:</label>
+            <input type="file" id="other1picture" name="other1picture"><br><br>
+
+            <label for="other2picture">Other 2 Picture:</label>
+            <input type="file" id="other2picture" name="other2picture"><br><br>
+
+            <label for="other3picture">Other 3 Picture:</label>
+            <input type="file" id="other3picture" name="other3picture"><br><br>
+
+            <button type="submit">Update Document</button>
+        </form>
+        {% else %}
+        <p>No document found. Please enter a valid iqama.</p>
+        {% endif %}
+    </main>
+</body>
+</html>

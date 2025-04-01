@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('search') }}">View or Edit Document</a></li>
+            <li><a href="{{ url_for('all_documents') }}">All Entries</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h1>Search Entries</h1>
+        <form method="POST" action="{{ url_for('search') }}">
+            <label for="name">Select Name:</label>
+            <select id="name" name="name" onchange="updateIqama()">
+                <option value="">-- Select Name --</option>
+                {% for name, iqama in names %}
+                    <option value="{{ iqama }}">{{ name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="Iqama">Iqama Number:</label>
+            <input type="text" id="Iqama" name="Iqama" required readonly>
+            
+            <button type="submit">Search</button>
+        </form>
+
+        {% if message %}
+        <p>{{ message }}</p>
+        {% endif %}
+    </main>
+
+    <script>
+        function updateIqama() {
+            let nameDropdown = document.getElementById("name");
+            let iqamaInput = document.getElementById("Iqama");
+            iqamaInput.value = nameDropdown.value;
+        }
+    </script>
+
+</body>
+</html>
