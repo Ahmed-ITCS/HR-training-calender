@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Add New Request{% endblock %}
+
+{% block content %}
+    <h1>Submit a New Request</h1>
+    <form method="POST" action="{{ url_for('add_request') }}" class="form-container">
+        <div class="form-section">
+            <h2>Request Details</h2>
+            <div class="grid">
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Your Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="request_details">Details of your request</label>
+                    <textarea id="request_details" name="request_details" rows="8" required></textarea>
+                </div>
+            </div>
+        </div>
+        <button type="submit">Submit Request</button>
+    </form>
+{% endblock %}

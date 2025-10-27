@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Event</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Add Event</h1>
+        <form method="POST">
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" value="{{ selected_date }}" required>
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description"></textarea>
+            <button type="submit">Add Event</button>
+        </form>
+        <p><a href="{{ url_for('calendar') }}">Back to Calendar</a></p>
+    </div>
+</body>
+</html>

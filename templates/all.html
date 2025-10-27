@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block title %}All Documents{% endblock %}
+
+{% block head_extra %}
+    <script>
+        function confirmDelete(id) {
+            if (confirm("Are you sure you want to delete this document?")) {
+                window.location.href = "/delete/" + id;
+            }
+        }
+
+        function searchDocuments() {
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let rows = document.querySelectorAll("#documentTable tbody tr");
+            rows.forEach(row => {
+                let name = row.children[0].innerText.toLowerCase();
+                let docNumber = row.children[1].innerText.toLowerCase();
+                let iqamaExpiry = row.children[2].innerText.toLowerCase();
+                let licenseExpiry = row.children[3].innerText.toLowerCase();
+                if (name.includes(input) || docNumber.includes(input) || iqamaExpiry.includes(input) || licenseExpiry.includes(input)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+
+        function highlightExpiringDocs() {
+            let rows = document.querySelectorAll("#documentTable tbody tr");
+            let currentDate = new Date();
+            rows.forEach(row => {
+                let expiryColumns = [
+                    row.children[2],  // Iqama Expiry
+                    row.children[4],  // License Expiry
+                    row.children[6],  // Muqeem Expiry
+                    row.children[7],  // Sabic Expiry
+                    row.children[8],  // Aramcoid Expiry
+                    row.children[9],  // Sabic medical Expiry
+                    row.children[10], // Ajeer Expiry
+                    row.children[11], // Other 1 Expiry
+                    row.children[12], // Other 2 Expiry
+                    row.children[13], // Other 3 Expiry
+                ];
+                expiryColumns.forEach(cell => {
+                    let expiryDate = new Date(cell.innerText);
+                    if (isDateNearExpiry(expiryDate, currentDate)) {
+                        cell.style.backgroundColor = "#f8d7da"; // Light red background for expiring cells
+                        cell.style.color = "#721c24"; // Dark red text
+                    } else {
+                        cell.style.backgroundColor = ""; // Reset the background
+                        cell.style.color = ""; // Reset the text color
+                    }
+                });
+            });
+        }
+
+        function isDateNearExpiry(expiryDate, currentDate) {
+            let timeDiff = expiryDate - currentDate;
+            let daysLeft = timeDiff / (1000 * 3600 * 24); // Convert time difference to days
+            return daysLeft <= 15 && daysLeft >= 0;
+        }
+
+        window.onload = function () {
+            highlightExpiringDocs();
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">All Entries</h1>
+        <div class="mb-3">
+            <input type="text" id="searchInput" onkeyup="searchDocuments()" placeholder="Search documents..."
+                class="form-control" style="width: 100%;">
+        </div>
+        <table id="documentTable" class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Iqama</th>
+                    <th>Iqama Expiry Date</th>
+                    <th>License</th>
+                    <th>License Expiry Date</th>
+                    <th>Aramco ID</th>
+                    <th>Muqeem Expiry</th>
+                    <th>Sabic Expiry</th>
+                    <th>Aramcoid Expiry</th>
+                    <th>Sabic Medical Expiry</th>
+                    <th>Ajeer Expiry</th>
+                    <th>Other 1 Expiry</th>
+                    <th>Other 2 Expiry</th>
+                    <th>Other 3 Expiry</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for document in documents %}
+                <tr>
+                    <td>{{ document.name }}</td>
+                    <td>{{ document.iqama }}</td>
+                    <td>{{ document.iqama_expiry }}</td>
+                    <td>{{ document.license }}</td>
+                    <td>{{ document.license_expiry }}</td>
+                    <td>{{ document.Aramcoid }}</td>
+                    <td>{{ document.MuqeemExpiry }}</td>
+                    <td>{{ document.SabicExpiry }}</td>
+                    <td>{{ document.AramcoidExpiry }}</td>
+                    <td>{{ document.SabicmedicalExpiry }}</td>
+                    <td>{{ document.AjeerExpiry }}</td>
+                    <td>{{ document.other1expiry }}</td>
+                    <td>{{ document.other2expiry }}</td>
+                    <td>{{ document.other3expiry }}</td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <a href="{{ url_for('edit_document', id=document.id) }}" class="btn btn-sm btn-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                </svg>
+                                Edit
+                            </a>
+                            <button onclick="confirmDelete({{ document.id }})" class="btn btn-sm btn-danger">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                </svg>
+                                Delete
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

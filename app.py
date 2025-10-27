@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 import os
 from werkzeug.utils import secure_filename
@@ -21,6 +21,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///documents.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SESSION_TYPE'] = 'null'
 app.config['SESSION_PERMANENT'] = False
+app.secret_key = 'your_secret_key'  # Replace with a strong, unique secret key
+
+ADMIN_PASSWORD = 'admin'
 
 db = SQLAlchemy(app)
 
@@ -66,6 +69,19 @@ class Document(db.Model):
     other3 = db.Column(db.String(200), nullable=True)
     other3expiry = db.Column(db.String(100), nullable=False)
 
+class Request(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+    request_details = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+class Event(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.String(100), nullable=False)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+
 with app.app_context():
     db.create_all()
 
@@ -76,6 +92,50 @@ def allowed_file(filename):
 
 @app.route('/')
 def index():
+    return redirect(url_for('home'))
+
+@app.route('/home')
+def home():
+    return render_template('home.html')
+
+@app.route('/calendar')
+def calendar():
+    return render_template('calendar.html')
+
+@app.route('/add_event', methods=['GET', 'POST'])
+def add_event():
+    selected_date = request.args.get('date')
+    if request.method == 'POST':
+        date = request.form['date']
+        title = request.form['title']
+        description = request.form['description']
+        new_event = Event(date=date, title=title, description=description)
+        db.session.add(new_event)
+        db.session.commit()
+        flash('Event added successfully!', 'success')
+        return redirect(url_for('view_events', date=date))
+    return render_template('add_event.html', selected_date=selected_date)
+
+@app.route('/add_request', methods=['GET', 'POST'])
+def add_request():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        request_details = request.form['request_details']
+        new_request = Request(name=name, email=email, request_details=request_details)
+        db.session.add(new_request)
+        db.session.commit()
+        flash('Your request has been submitted successfully!', 'success')
+        return redirect(url_for('index')) # Redirect to home or a confirmation page
+    return render_template('add_request.html')
+
+@app.route('/view_events/<date>')
+def view_events(date):
+    events = Event.query.filter_by(date=date).all()
+    return render_template('view_events.html', date=date, events=events)
+
+@app.route('/add_document', methods=['GET'])
+def add_document():
     return render_template('index.html')
 
 @app.route('/submit', methods=['POST'])
@@ -198,6 +258,36 @@ def edit_document(id):
 def all_documents():
     documents = Document.query.all()
     return render_template('all.html', documents=documents)
+
+@app.route('/admin_requests', methods=['GET', 'POST'])
+def admin_requests():
+    if request.method == 'POST':
+        password = request.form.get('password')
+        if password == ADMIN_PASSWORD:
+            session['admin_logged_in'] = True
+            flash('Logged in as admin!', 'success')
+        else:
+            flash('Incorrect password.', 'error')
+        return redirect(url_for('admin_requests'))
+
+    if not session.get('admin_logged_in'):
+        return render_template('admin_requests.html')
+
+    requests = Request.query.order_by(Request.timestamp.desc()).all()
+    return render_template('admin_requests.html', requests=requests)
+
+@app.route('/delete_request/<int:request_id>', methods=['GET'])
+def delete_request(request_id):
+    if not session.get('admin_logged_in'):
+        flash('Unauthorized access.', 'error')
+        return redirect(url_for('admin_requests'))
+
+    request_to_delete = Request.query.get_or_404(request_id)
+    db.session.delete(request_to_delete)
+    db.session.commit()
+    flash('Request deleted successfully!', 'success')
+    return redirect(url_for('admin_requests'))
+
 @app.route('/delete/<int:doc_id>', methods=['GET'])
 def delete_document(doc_id):
     document = Document.query.get_or_404(doc_id)
