@@ -78,4 +78,30 @@ The application should now be running at `http://127.0.0.1:5000/`.
 * **Admin (`/admin_requests`)**: Access the password-protected admin panel to view and delete requests. The default admin password is `admin`.
 
 ## Project Structure
-# HR-training-calender
+
+```
+.
+├── README.md               # This file 
+├── app.py                  # Main Flask application file, contains routes, models, and configurations 
+├── instance/               # Contains the SQLite database (documents.db) 
+│   └── documents.db 
+├── static/ 
+│   ├── styles.css          # Custom CSS styles for the application's look and feel 
+│   └── uploads/            # Directory where uploaded document files are stored 
+├── templates/ 
+│   ├── add_event.html      # Template for adding new events to the calendar 
+│   ├── add_request.html    # Template for the request submission form 
+│   ├── admin_requests.html # Template for the admin panel to manage requests 
+│   ├── all.html            # Template to display a list of all documents 
+│   ├── base.html           # Base template for consistent navigation and layout across pages 
+│   ├── calendar.html       # Template for the interactive calendar view 
+│   ├── edit.html           # Template for editing existing document details 
+│   ├── home.html           # The main landing page template 
+│   ├── index.html          # Template for the document submission form 
+│   ├── search.html         # Template for searching documents 
+│   ├── view.html           # Template for viewing details of a single document 
+│   └── view_events.html    # Template for displaying events on a specific date 
+└── venv/                   # Python virtual environment for dependency isolation 
+```
+
+## Contributing
