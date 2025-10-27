@@ -29,7 +29,7 @@ db = SQLAlchemy(app)
 
 # Email credentials
 SENDER_EMAIL = "ahmedkhawarbs@gmail.com"
-APP_PASSWORD = "oggv zthz rnlx dret"
+APP_PASSWORD = ""
 RECIPIENT_EMAIL = "ahmedphp676@gmail.com"
 
 # Document model
