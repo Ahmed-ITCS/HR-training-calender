@@ -31,7 +31,7 @@ class Document(db.Model):
 
 # --- Email Settings ---
 SENDER_EMAIL = "ahmedkhawarbs@gmail.com"
-APP_PASSWORD = "adjn dknx wjnv knom"  # <-- put your app password here
+APP_PASSWORD =  # <-- put your app password here
 RECIPIENT_EMAIL = "ahmedphp676@gmail.com"
 
 # --- Helper: Parse date safely ---
